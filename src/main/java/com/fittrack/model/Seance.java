@@ -1,5 +1,7 @@
 package com.fittrack.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -20,6 +22,7 @@ public class Seance {
     @Column(nullable = false)
     private LocalDate date;
 
+    @JsonProperty(access = Access.WRITE_ONLY)
     @ManyToOne
     @JoinColumn(name = "utilisateur_id", nullable = false)
     private Utilisateur utilisateur;

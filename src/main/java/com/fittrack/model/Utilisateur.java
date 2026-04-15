@@ -1,5 +1,6 @@
 package com.fittrack.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.List;
@@ -22,6 +23,7 @@ public class Utilisateur {
     @Column(nullable = false)
     private String prenom;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
     private List<Seance> seances;
 }

@@ -1,5 +1,7 @@
 package com.fittrack.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,6 +26,7 @@ public class ExerciceSeance {
     @Column(nullable = false)
     private double poids;
 
+    @JsonProperty(access = Access.WRITE_ONLY)
     @ManyToOne
     @JoinColumn(name = "seance_id", nullable = false)
     private Seance seance;
