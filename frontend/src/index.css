@@ -1,111 +1,352 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap');
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --bg:        #090909;
+  --surface:   #111111;
+  --card:      #161616;
+  --border:    #242424;
+  --accent:    #C8F135;
+  --accent-dim:#8aab22;
+  --danger:    #ff4545;
+  --text:      #F0F0F0;
+  --muted:     #555;
+  --muted2:    #333;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
   color: var(--text);
   background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+body {
+  min-height: 100svh;
+  background: var(--bg);
+  background-image:
+    linear-gradient(var(--muted2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--muted2) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
+}
+
+/* ── Layout ─────────────────────────────────────────── */
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0 40px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+.app-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  letter-spacing: 2px;
+  color: var(--text);
+  line-height: 1;
+}
+
+.app-logo span {
+  color: var(--accent);
+}
+
+.header-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(200, 241, 53, 0.08);
+  border: 1px solid rgba(200, 241, 53, 0.2);
+  padding: 3px 8px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ── Section title ───────────────────────────────────── */
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 1.5px;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.section-count {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  margin-left: 10px;
+  font-weight: 400;
+}
+
+/* ── Add form ────────────────────────────────────────── */
+.add-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 40px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 12px;
+}
+
+.add-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  padding: 6px 8px;
+}
+
+.add-form input::placeholder { color: var(--muted); }
+
+.add-form input[type="date"] {
+  flex: 0 0 auto;
+  width: 140px;
+  color-scheme: dark;
+  cursor: pointer;
+}
+
+.btn-add {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 8px 20px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.btn-add:hover { background: #d8ff40; }
+.btn-add:active { transform: scale(0.97); }
+
+/* ── Exercise add form ───────────────────────────────── */
+.exercise-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 20px;
+  margin-bottom: 40px;
+}
+
+.exercise-form-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 90px;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.exercise-form input {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  outline: none;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  padding: 8px 10px;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+.exercise-form input:focus { border-color: var(--accent); }
+.exercise-form input::placeholder { color: var(--muted); }
+
+.exercise-form-labels {
+  display: grid;
+  grid-template-columns: 1fr 80px 80px 90px;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.form-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-left: 2px;
+}
+
+/* ── Session card ────────────────────────────────────── */
+.session-list {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  gap: 2px;
 }
 
-body {
-  margin: 0;
+.session-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid transparent;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  animation: slideIn 0.2s ease forwards;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.session-card:hover {
+  border-left-color: var(--accent);
+  background: #1c1c1c;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
+.session-info { display: flex; flex-direction: column; gap: 4px; }
 
-code {
+.session-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
   font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  color: var(--text);
+}
+
+.session-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+.session-actions { display: flex; align-items: center; gap: 12px; }
+
+.session-arrow {
+  font-size: 18px;
+  color: var(--muted);
+  transition: color 0.15s, transform 0.15s;
+}
+
+.session-card:hover .session-arrow {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+/* ── Exercise card ───────────────────────────────────── */
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.exercise-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 16px 20px;
+  animation: slideIn 0.2s ease forwards;
+}
+
+.exercise-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.exercise-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.stat-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── Delete button ───────────────────────────────────── */
+.btn-delete {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 5px 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.5px;
+}
+
+.btn-delete:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: rgba(255, 69, 69, 0.05);
+}
+
+/* ── Back button ─────────────────────────────────────── */
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 32px;
+  letter-spacing: 0.5px;
+  transition: color 0.15s;
+}
+
+.btn-back:hover { color: var(--accent); }
+
+/* ── Empty state ─────────────────────────────────────── */
+.empty {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--muted);
+  padding: 32px 0;
+  text-align: center;
+  border: 1px dashed var(--muted2);
+}
+
+/* ── Divider ─────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 20px;
 }

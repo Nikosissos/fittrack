@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getSeances, creerSeance, supprimerSeance } from '../api';
 import type { Seance } from '../types';
 
-const UTILISATEUR_ID = 1; // temporaire, sera remplacé par l'auth
+const UTILISATEUR_ID = 1;
 
 export default function Seances() {
   const [seances, setSeances] = useState<Seance[]>([]);
@@ -24,56 +24,65 @@ export default function Seances() {
     setNom('');
   };
 
-  const handleSupprimer = async (id: number) => {
+  const handleSupprimer = async (e: React.MouseEvent, id: number) => {
+    e.stopPropagation();
     await supprimerSeance(id);
     setSeances(prev => prev.filter(s => s.id !== id));
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', padding: '0 16px', fontFamily: 'sans-serif' }}>
-      <h1>FitTrack</h1>
-      <h2>Mes séances</h2>
+    <div className="page">
+      <header className="app-header">
+        <div>
+          <div className="app-logo">FIT<span>TRACK</span></div>
+        </div>
+        <div className="header-tag">v0.1</div>
+      </header>
 
-      <form onSubmit={handleCreer} style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+      <form className="add-form" onSubmit={handleCreer}>
         <input
           value={nom}
           onChange={e => setNom(e.target.value)}
-          placeholder="Nom de la séance"
+          placeholder="Nom de la séance (ex: Push lundi)"
           required
-          style={{ flex: 1, padding: '8px 12px', fontSize: 14 }}
         />
         <input
           type="date"
           value={date}
           onChange={e => setDate(e.target.value)}
           required
-          style={{ padding: '8px 12px', fontSize: 14 }}
         />
-        <button type="submit" style={{ padding: '8px 16px', background: '#2563eb', color: 'white', border: 'none', cursor: 'pointer' }}>
-          Ajouter
-        </button>
+        <button type="submit" className="btn-add">+ Ajouter</button>
       </form>
 
-      {seances.length === 0 && <p style={{ color: '#888' }}>Aucune séance pour l'instant.</p>}
+      <div className="section-title">
+        Séances
+        <span className="section-count">{seances.length} enregistrée{seances.length > 1 ? 's' : ''}</span>
+      </div>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {seances.map(s => (
-          <li key={s.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid #eee' }}>
-            <span
-              onClick={() => navigate(`/seances/${s.id}`)}
-              style={{ cursor: 'pointer', fontWeight: 500, color: '#2563eb' }}
-            >
-              {s.nom} — {s.date}
-            </span>
-            <button
-              onClick={() => handleSupprimer(s.id)}
-              style={{ background: 'none', border: '1px solid #ddd', padding: '4px 10px', cursor: 'pointer', color: '#888' }}
-            >
-              Supprimer
-            </button>
-          </li>
-        ))}
-      </ul>
+      {seances.length === 0
+        ? <div className="empty">// Aucune séance. Commence ton premier entraînement.</div>
+        : (
+          <ul className="session-list" style={{ listStyle: 'none', padding: 0 }}>
+            {seances.map(s => (
+              <li key={s.id}>
+                <div className="session-card" onClick={() => navigate(`/seances/${s.id}`)}>
+                  <div className="session-info">
+                    <span className="session-name">{s.nom}</span>
+                    <span className="session-date">{s.date}</span>
+                  </div>
+                  <div className="session-actions">
+                    <button className="btn-delete" onClick={e => handleSupprimer(e, s.id)}>
+                      suppr.
+                    </button>
+                    <span className="session-arrow">→</span>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
   );
 }

@@ -15,7 +15,9 @@ export default function DetailSeance() {
   const [poids, setPoids] = useState(0);
 
   useEffect(() => {
-    getExercices(seanceId).then(setExercices);
+    getExercices(seanceId)
+      .then(data => Array.isArray(data) ? setExercices(data) : setExercices([]))
+      .catch(() => setExercices([]));
   }, [seanceId]);
 
   const handleAjouter = async (e: React.FormEvent) => {
@@ -31,48 +33,104 @@ export default function DetailSeance() {
     setExercices(prev => prev.filter(e => e.id !== exId));
   };
 
+  const totalVolume = exercices.reduce((acc, ex) => acc + ex.series * ex.repetitions * ex.poids, 0);
+
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', padding: '0 16px', fontFamily: 'sans-serif' }}>
-      <button onClick={() => navigate('/')} style={{ background: 'none', border: 'none', color: '#2563eb', cursor: 'pointer', marginBottom: 16 }}>
-        ← Retour
+    <div className="page">
+      <header className="app-header">
+        <div className="app-logo">FIT<span>TRACK</span></div>
+        <div className="header-tag">séance #{seanceId}</div>
+      </header>
+
+      <button className="btn-back" onClick={() => navigate('/')}>
+        ← retour
       </button>
-      <h2>Exercices de la séance</h2>
 
-      <form onSubmit={handleAjouter} style={{ display: 'grid', gap: 8, marginBottom: 24 }}>
-        <input
-          value={nom}
-          onChange={e => setNom(e.target.value)}
-          placeholder="Exercice (ex: Squat)"
-          required
-          style={{ padding: '8px 12px', fontSize: 14 }}
-        />
-        <div style={{ display: 'flex', gap: 8 }}>
-          <input type="number" value={series} onChange={e => setSeries(Number(e.target.value))} min={1} placeholder="Séries" style={{ flex: 1, padding: '8px 12px', fontSize: 14 }} />
-          <input type="number" value={repetitions} onChange={e => setRepetitions(Number(e.target.value))} min={1} placeholder="Répétitions" style={{ flex: 1, padding: '8px 12px', fontSize: 14 }} />
-          <input type="number" value={poids} onChange={e => setPoids(Number(e.target.value))} min={0} step={0.5} placeholder="Poids (kg)" style={{ flex: 1, padding: '8px 12px', fontSize: 14 }} />
+      <div className="section-title">
+        Exercices
+        <span className="section-count">{exercices.length} exercice{exercices.length > 1 ? 's' : ''}</span>
+      </div>
+
+      {totalVolume > 0 && (
+        <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: 'var(--accent)', marginBottom: 24, letterSpacing: 1 }}>
+          VOLUME TOTAL: {totalVolume.toLocaleString('fr-FR')} kg
         </div>
-        <button type="submit" style={{ padding: '8px 16px', background: '#2563eb', color: 'white', border: 'none', cursor: 'pointer' }}>
-          Ajouter l'exercice
-        </button>
-      </form>
+      )}
 
-      {exercices.length === 0 && <p style={{ color: '#888' }}>Aucun exercice pour l'instant.</p>}
+      <div className="exercise-form">
+        <div className="exercise-form-labels">
+          <span className="form-label">Exercice</span>
+          <span className="form-label">Séries</span>
+          <span className="form-label">Reps</span>
+          <span className="form-label">Poids (kg)</span>
+        </div>
+        <form onSubmit={handleAjouter}>
+          <div className="exercise-form-row">
+            <input
+              value={nom}
+              onChange={e => setNom(e.target.value)}
+              placeholder="ex: Squat"
+              required
+            />
+            <input
+              type="number"
+              value={series}
+              onChange={e => setSeries(Number(e.target.value))}
+              min={1}
+            />
+            <input
+              type="number"
+              value={repetitions}
+              onChange={e => setRepetitions(Number(e.target.value))}
+              min={1}
+            />
+            <input
+              type="number"
+              value={poids}
+              onChange={e => setPoids(Number(e.target.value))}
+              min={0}
+              step={0.5}
+            />
+          </div>
+          <button type="submit" className="btn-add" style={{ width: '100%', fontSize: 16, padding: '10px' }}>
+            + Enregistrer l'exercice
+          </button>
+        </form>
+      </div>
 
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {exercices.map(ex => (
-          <li key={ex.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 0', borderBottom: '1px solid #eee' }}>
-            <span>
-              <strong>{ex.nom}</strong> — {ex.series}x{ex.repetitions} à {ex.poids} kg
-            </span>
-            <button
-              onClick={() => handleSupprimer(ex.id)}
-              style={{ background: 'none', border: '1px solid #ddd', padding: '4px 10px', cursor: 'pointer', color: '#888' }}
-            >
-              Supprimer
-            </button>
-          </li>
-        ))}
-      </ul>
+      {exercices.length === 0
+        ? <div className="empty">// Aucun exercice. Ajoute ton premier mouvement.</div>
+        : (
+          <ul className="exercise-list" style={{ listStyle: 'none', padding: 0 }}>
+            {exercices.map(ex => (
+              <li key={ex.id}>
+                <div className="exercise-card">
+                  <div>
+                    <div className="exercise-name">{ex.nom}</div>
+                    <div className="exercise-stats">
+                      <div className="stat">
+                        <span className="stat-value">{ex.series}</span>
+                        <span className="stat-label">séries</span>
+                      </div>
+                      <div className="stat">
+                        <span className="stat-value">{ex.repetitions}</span>
+                        <span className="stat-label">reps</span>
+                      </div>
+                      <div className="stat">
+                        <span className="stat-value">{ex.poids}</span>
+                        <span className="stat-label">kg</span>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="btn-delete" onClick={() => handleSupprimer(ex.id)}>
+                    suppr.
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )
+      }
     </div>
   );
 }
