@@ -34,10 +34,13 @@ public class SeanceService {
 
     public double calculerVolume(Long seanceId) {
         List<ExerciceSeance> exercices = exerciceSeanceRepository.findBySeanceId(seanceId);
-        int volume = 0;
+        /*int volume = 0;
         for (ExerciceSeance exercice : exercices) {
             volume += exercice.getSeries() * exercice.getRepetitions() * exercice.getPoids();
         }
-        return volume;
+        return volume;*/
+        return exercices.stream()
+            .mapToDouble(e -> e.getSeries() * e.getRepetitions() * e.getPoids())
+            .sum();
     }
 }
