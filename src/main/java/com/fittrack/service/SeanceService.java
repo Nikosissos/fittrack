@@ -4,6 +4,7 @@ import com.fittrack.model.Seance;
 import com.fittrack.model.ExerciceSeance;
 import com.fittrack.repository.SeanceRepository;
 import com.fittrack.repository.ExerciceSeanceRepository;
+import com.fittrack.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -25,7 +26,8 @@ public class SeanceService {
 
     public Seance getSeanceById(Long id) {
         return seanceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Séance non trouvée"));
+                //.orElseThrow(() -> new RuntimeException("Séance non trouvée"));
+                .orElseThrow(() -> new ResourceNotFoundException("Séance non trouvée avec l'id : " + id));
     }
 
     public void supprimerSeance(Long id) {
@@ -39,6 +41,10 @@ public class SeanceService {
             volume += exercice.getSeries() * exercice.getRepetitions() * exercice.getPoids();
         }
         return volume;*/
+        if (!seanceRepository.existsById(seanceId)) {
+            throw new ResourceNotFoundException("Séance non trouvée avec l'id : " + seanceId);
+        }
+
         return exercices.stream()
             .mapToDouble(e -> e.getSeries() * e.getRepetitions() * e.getPoids())
             .sum();

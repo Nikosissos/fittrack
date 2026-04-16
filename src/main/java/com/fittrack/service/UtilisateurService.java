@@ -2,6 +2,7 @@ package com.fittrack.service;
 
 import com.fittrack.model.Utilisateur;
 import com.fittrack.repository.UtilisateurRepository;
+import com.fittrack.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
@@ -18,7 +19,8 @@ public class UtilisateurService {
 
     public Utilisateur modifierUtilisateur(Long id, Utilisateur utilisateur) {
         Utilisateur existant = utilisateurRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                //.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new ResourceNotFoundException("Utilisateur non trouvé avec l'id : " + id));
         existant.setPrenom(utilisateur.getPrenom());
         existant.setEmail(utilisateur.getEmail());
         return utilisateurRepository.save(existant);
