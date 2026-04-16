@@ -25,6 +25,11 @@ public class SeanceController {
         return ResponseEntity.ok(seanceService.getSeanceById(id));
     }
 
+    @GetMapping("/{id}/volume")
+    public ResponseEntity<Double> getVolume(@PathVariable Long id) {
+        return ResponseEntity.ok(seanceService.calculerVolume(id));
+    }
+
     @PostMapping
     public ResponseEntity<Seance> creer(@RequestBody Seance seance) {
         return ResponseEntity.ok(seanceService.creerSeance(seance));
