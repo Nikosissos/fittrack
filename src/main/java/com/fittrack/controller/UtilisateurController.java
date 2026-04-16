@@ -22,4 +22,15 @@ public class UtilisateurController {
     public ResponseEntity<Utilisateur> getById(@PathVariable Long id) {
         return ResponseEntity.ok(utilisateurService.getById(id));
     }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Utilisateur> setById(@PathVariable Long id, @RequestBody Utilisateur utilisateur) {
+        return ResponseEntity.ok(utilisateurService.modifierUtilisateur(id, utilisateur));
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        utilisateurService.supprimerUtilisateur(id);
+        return ResponseEntity.noContent().build();
+    }
 }
