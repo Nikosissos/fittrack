@@ -6,6 +6,8 @@ import com.fittrack.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import com.fittrack.dto.UtilisateurRequest;
+import com.fittrack.dto.UtilisateurResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -13,8 +15,23 @@ public class UtilisateurService {
 
     private final UtilisateurRepository utilisateurRepository;
 
-    public Utilisateur creerUtilisateur(Utilisateur utilisateur) {
+    /*public Utilisateur creerUtilisateur(Utilisateur utilisateur) {
         return utilisateurRepository.save(utilisateur);
+    }*/
+
+    public UtilisateurResponse creerUtilisateur(UtilisateurRequest request) {
+        Utilisateur utilisateur = new Utilisateur();
+        utilisateur.setEmail(request.getEmail());
+        utilisateur.setMotDePasse(request.getMotDePasse()); // sera hashé plus tard avec JWT
+        utilisateur.setPrenom(request.getPrenom());
+
+        Utilisateur sauvegarde = utilisateurRepository.save(utilisateur);
+
+        UtilisateurResponse response = new UtilisateurResponse();
+        response.setId(sauvegarde.getId());
+        response.setEmail(sauvegarde.getEmail());
+        response.setPrenom(sauvegarde.getPrenom());
+        return response;
     }
 
     public Utilisateur modifierUtilisateur(Long id, Utilisateur utilisateur) {

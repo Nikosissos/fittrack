@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import com.fittrack.dto.UtilisateurRequest;
+import com.fittrack.dto.UtilisateurResponse;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
@@ -14,9 +16,13 @@ public class UtilisateurController {
 
     private final UtilisateurService utilisateurService;
 
-    @PostMapping
+    /*@PostMapping
     public ResponseEntity<Utilisateur> creer(@Valid @RequestBody Utilisateur utilisateur) {
         return ResponseEntity.ok(utilisateurService.creerUtilisateur(utilisateur));
+    }*/
+    @PostMapping
+    public ResponseEntity<UtilisateurResponse> creer(@Valid @RequestBody UtilisateurRequest request) {
+        return ResponseEntity.ok(utilisateurService.creerUtilisateur(request));
     }
 
     @GetMapping("/{id}")
