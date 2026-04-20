@@ -4,7 +4,6 @@ import { getSeances, creerSeance, supprimerSeance } from '../api';
 import type { Seance } from '../types';
 
 const UTILISATEUR_ID = Number(localStorage.getItem('userId'));
-console.log('UTILISATEUR_ID:', UTILISATEUR_ID);
 
 export default function Seances() {
   const [seances, setSeances] = useState<Seance[]>([]);
