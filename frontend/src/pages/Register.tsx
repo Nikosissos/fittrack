@@ -12,7 +12,7 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await register(email, motDePasse, prenom);
+      await register(email, motDePasse, prenom);
       navigate('/login');
     } catch {
       setErreur('Email déjà utilisé');
