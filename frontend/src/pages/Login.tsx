@@ -12,8 +12,9 @@ export default function Login() {
     e.preventDefault();
     try {
       const data = await login(email, motDePasse);
+      localStorage.setItem('userId', String(data.id));
       localStorage.setItem('token', data.token);
-      localStorage.setItem('userId', String(data.email));
+      localStorage.setItem('userEmail', String(data.email));
       navigate('/');
     } catch {
       setErreur('Email ou mot de passe incorrect');

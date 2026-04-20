@@ -10,15 +10,15 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/" element={
-                          <PrivateRoute>
-                            <Seances />
-                          </PrivateRoute>
-                        } />
+          <PrivateRoute>
+            <Seances />
+          </PrivateRoute>
+        } />
         <Route path="/seances/:id" element={
-                                      <PrivateRoute>
-                                        <DetailSeance />
-                                      </PrivateRoute>
-                                    } />
+          <PrivateRoute>
+            <DetailSeance />
+          </PrivateRoute>
+        } />
       </Routes>
     </BrowserRouter>
   );

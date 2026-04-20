@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getSeances, creerSeance, supprimerSeance } from '../api';
 import type { Seance } from '../types';
 
-const UTILISATEUR_ID = 1;
+const UTILISATEUR_ID = Number(localStorage.getItem('userId'));
+console.log('UTILISATEUR_ID:', UTILISATEUR_ID);
 
 export default function Seances() {
   const [seances, setSeances] = useState<Seance[]>([]);
@@ -37,6 +38,10 @@ export default function Seances() {
           <div className="app-logo">FIT<span>TRACK</span></div>
         </div>
         <div className="header-tag">v0.1</div>
+        <div className="deconnection-button" onClick={() => {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }}>Déconnexion</div>
       </header>
 
       <form className="add-form" onSubmit={handleCreer}>

@@ -15,7 +15,7 @@ export const creerUtilisateur = (data: Omit<Utilisateur, 'id'>) =>
   api.post<Utilisateur>('/utilisateurs', data).then(r => r.data);
 
 export const login = (email: string, motDePasse: string) =>
-  api.post<{ token: string; email: string; prenom: string }>(
+  api.post<{id: number; token: string; email: string; prenom: string }>(
     '/auth/login', 
     { email, motDePasse }
   ).then(r => r.data);
