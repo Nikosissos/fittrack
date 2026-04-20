@@ -1,23 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../api';
+import { register } from '../api';
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
+  const [prenom, setPrenom] = useState('');
   const [erreur, setErreur] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const data = await login(email, motDePasse);
-      localStorage.setItem('userId', String(data.id));
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('userEmail', String(data.email));
-      navigate('/');
+      const data = await register(email, motDePasse, prenom);
+      navigate('/login');
     } catch {
-      setErreur('Email ou mot de passe incorrect');
+      setErreur('Email déjà utilisé');
     }
   };
 
@@ -26,6 +24,14 @@ export default function Login() {
       <div className="app-logo" style={{ marginBottom: 32 }}>FIT<span>TRACK</span></div>
 
       <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Prénom"
+          value={prenom}
+          onChange={e => setPrenom(e.target.value)}
+          required
+          style={{ width: '100%', marginBottom: 12 }}
+        />
         <input
           type="email"
           placeholder="Email"
@@ -44,11 +50,11 @@ export default function Login() {
         />
         {erreur && <div style={{ color: 'red', marginBottom: 12 }}>{erreur}</div>}
         <button type="submit" className="btn-add" style={{ width: '100%' }}>
-          Se connecter
+          Créer mon compte
         </button>
       </form>
-      <button className="btn-add" style={{ width: '100%', marginTop: 5}} onClick={() => navigate('/register')}>
-          S'enregistrer
+        <button className="btn-add" style={{ width: '100%', marginTop: 5}} onClick={() => navigate('/login')}>
+            Se connecter
         </button>
     </div>
   );

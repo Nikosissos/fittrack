@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { getSeances, creerSeance, supprimerSeance } from '../api';
 import type { Seance } from '../types';
 
-const UTILISATEUR_ID = Number(localStorage.getItem('userId'));
 
 export default function Seances() {
+  const UTILISATEUR_ID = Number(localStorage.getItem('userId'));
   const [seances, setSeances] = useState<Seance[]>([]);
   const [nom, setNom] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
