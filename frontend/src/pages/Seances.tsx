@@ -69,7 +69,7 @@ export default function Seances() {
                 <div className="session-card" onClick={() => navigate(`/seances/${s.id}`)}>
                   <div className="session-info">
                     <span className="session-name">{s.nom}</span>
-                    <span className="session-date">{s.date}</span>
+                    <span className="session-date">{new Date(s.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
                   </div>
                   <div className="session-actions">
                     <button className="btn-delete" onClick={e => handleSupprimer(e, s.id)}>

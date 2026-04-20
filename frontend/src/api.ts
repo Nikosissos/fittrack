@@ -3,8 +3,22 @@ import type { Seance, ExerciceSeance, Utilisateur } from './types';
 
 const api = axios.create({ baseURL: '/api' });
 
+api.interceptors.request.use(config => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const creerUtilisateur = (data: Omit<Utilisateur, 'id'>) =>
   api.post<Utilisateur>('/utilisateurs', data).then(r => r.data);
+
+export const login = (email: string, motDePasse: string) =>
+  api.post<{ token: string; email: string; prenom: string }>(
+    '/auth/login', 
+    { email, motDePasse }
+  ).then(r => r.data);
 
 export const getSeances = (utilisateurId: number) =>
   api.get<Seance[]>('/seances', { params: { utilisateurId } }).then(r => r.data);
