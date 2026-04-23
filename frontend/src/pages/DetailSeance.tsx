@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getExercices, ajouterExercice, supprimerExercice } from '../api';
+import { getExercices, ajouterExercice, supprimerExercice, modifierExercice } from '../api';
 import type { ExerciceSeance } from '../types';
 
 export default function DetailSeance() {
@@ -10,9 +10,14 @@ export default function DetailSeance() {
 
   const [exercices, setExercices] = useState<ExerciceSeance[]>([]);
   const [nom, setNom] = useState('');
-  const [series, setSeries] = useState(3);
+  const [series, setSeries] = useState(4);
   const [repetitions, setRepetitions] = useState(10);
   const [poids, setPoids] = useState(0);
+
+const [exerciceEnEdition, setExerciceEnEdition] = useState<number | null>(null);
+const [editSeries, setEditSeries] = useState(0);
+const [editRepetitions, setEditRepetitions] = useState(0);
+const [editPoids, setEditPoids] = useState(0);
 
   useEffect(() => {
     getExercices(seanceId)
@@ -27,6 +32,18 @@ export default function DetailSeance() {
     setNom('');
     setPoids(0);
   };
+
+  const handleModifier = async (exId: number) => {
+    const modif = await modifierExercice(exId, { 
+        nom: exercices.find(e => e.id === exId)!.nom,
+        series: editSeries, 
+        repetitions: editRepetitions, 
+        poids: editPoids, 
+        seance: { id: seanceId } 
+    });
+    setExercices(prev => prev.map(ex => ex.id === exId ? modif : ex));
+    setExerciceEnEdition(null);
+};
 
   const handleSupprimer = async (exId: number) => {
     await supprimerExercice(exId);
@@ -109,22 +126,44 @@ export default function DetailSeance() {
                     <div className="exercise-name">{ex.nom}</div>
                     <div className="exercise-stats">
                       <div className="stat">
-                        <span className="stat-value">{ex.series}</span>
+                        {exerciceEnEdition === ex.id
+                          ? <input type="number" value={editSeries} onChange={e => setEditSeries(Number(e.target.value))} min={1} style={{width: 50}} />
+                          : <span className="stat-value">{ex.series}</span>
+                        }
                         <span className="stat-label">séries</span>
                       </div>
                       <div className="stat">
-                        <span className="stat-value">{ex.repetitions}</span>
+                        {exerciceEnEdition === ex.id
+                          ? <input type="number" value={editRepetitions} onChange={e => setEditRepetitions(Number(e.target.value))} min={1} style={{width: 50}} />
+                          : <span className="stat-value">{ex.repetitions}</span>
+                        }
                         <span className="stat-label">reps</span>
                       </div>
                       <div className="stat">
-                        <span className="stat-value">{ex.poids}</span>
+                        {exerciceEnEdition === ex.id
+                          ? <input type="number" value={editPoids} onChange={e => setEditPoids(Number(e.target.value))} min={0} step={0.5} style={{width: 50}} />
+                          : <span className="stat-value">{ex.poids}</span>
+                        }
                         <span className="stat-label">kg</span>
                       </div>
                     </div>
                   </div>
-                  <button className="btn-delete" onClick={() => handleSupprimer(ex.id)}>
-                    suppr.
-                  </button>
+                  {exerciceEnEdition === ex.id ? (
+                    <>
+                      <button className="btn-add" onClick={() => handleModifier(ex.id)}>✓</button>
+                      <button className="btn-delete" onClick={() => setExerciceEnEdition(null)}>✗</button>
+                    </>
+                  ) : (
+                    <>
+                      <button className="btn-add" onClick={() => {
+                        setExerciceEnEdition(ex.id);
+                        setEditSeries(ex.series);
+                        setEditRepetitions(ex.repetitions);
+                        setEditPoids(ex.poids);
+                      }}>edit</button>
+                      <button className="btn-delete" onClick={() => handleSupprimer(ex.id)}>suppr.</button>
+                    </>
+                  )}
                 </div>
               </li>
             ))}
