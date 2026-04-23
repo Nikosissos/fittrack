@@ -5,6 +5,7 @@ import com.fittrack.service.ExerciceSeanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fittrack.dto.ProgressionResponse;
 
 import java.util.List;
 
@@ -18,6 +19,13 @@ public class ExerciceSeanceController {
     @GetMapping
     public ResponseEntity<List<ExerciceSeance>> getBySeance(@RequestParam Long seanceId) {
         return ResponseEntity.ok(exerciceSeanceService.getExercicesBySeance(seanceId));
+    }
+
+    @GetMapping("/progression")
+    public ResponseEntity<List<ProgressionResponse>> getProgression(
+            @RequestParam String nom,
+            @RequestParam Long utilisateurId) {
+        return ResponseEntity.ok(exerciceSeanceService.getProgression(nom, utilisateurId));
     }
 
     @PostMapping

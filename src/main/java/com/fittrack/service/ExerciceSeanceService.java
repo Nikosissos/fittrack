@@ -5,6 +5,8 @@ import com.fittrack.repository.ExerciceSeanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import com.fittrack.dto.ProgressionResponse;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,18 @@ public class ExerciceSeanceService {
         existing.setRepetitions(données.getRepetitions());
         existing.setPoids(données.getPoids());
         return exerciceSeanceRepository.save(existing);
+    }
+
+    public List<ProgressionResponse> getProgression(String nom, Long utilisateurId) {
+        return exerciceSeanceRepository.findProgressionByNom(nom, utilisateurId)
+            .stream()
+            .map(e -> new ProgressionResponse(
+                e.getSeance().getDate(),
+                e.getSeries(),
+                e.getRepetitions(),
+                e.getPoids()
+            ))
+            .collect(Collectors.toList());
     }
 
     public void supprimerExercice(Long id) {
