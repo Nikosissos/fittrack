@@ -122,7 +122,7 @@ body {
   cursor: pointer;
 }
 
-.btn-add {
+.btn-add, .btn-edit {
   background: var(--accent);
   color: #000;
   border: none;
@@ -135,8 +135,8 @@ body {
   white-space: nowrap;
 }
 
-.btn-add:hover { background: #d8ff40; }
-.btn-add:active { transform: scale(0.97); }
+.btn-add, .btn-edit:hover { background: #d8ff40; }
+.btn-add, .btn-edit:active { transform: scale(0.97); }
 
 /* ── Exercise add form ───────────────────────────────── */
 .exercise-form {

@@ -170,7 +170,7 @@ export default function DetailSeance() {
                     </>
                   ) : (
                     <>
-                      <button className="btn-add" onClick={() => {
+                      <button className="btn-edit" onClick={() => {
                         setExerciceEnEdition(ex.id);
                         setEditSeries(ex.series);
                         setEditRepetitions(ex.repetitions);
