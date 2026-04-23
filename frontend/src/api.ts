@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Seance, ExerciceSeance, Utilisateur } from './types';
+import type { Seance, ExerciceSeance, ProgressionResponse, Utilisateur } from './types';
 
 const api = axios.create({ baseURL: '/api' });
 
@@ -37,6 +37,9 @@ export const supprimerSeance = (id: number) =>
 
 export const getExercices = (seanceId: number) =>
   api.get<ExerciceSeance[]>('/exercices', { params: { seanceId } }).then(r => r.data);
+
+export const getProgressionExercice = (nom: string, utilisateurId: number) =>
+  api.get<ProgressionResponse[]>('/exercices/progression', { params: { nom, utilisateurId } }).then(r => r.data);
 
 export const ajouterExercice = (data: Omit<ExerciceSeance, 'id'>) =>
   api.post<ExerciceSeance>('/exercices', data).then(r => r.data);

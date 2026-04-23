@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getExercices, ajouterExercice, supprimerExercice, modifierExercice } from '../api';
-import type { ExerciceSeance } from '../types';
+import { getExercices, ajouterExercice, supprimerExercice, modifierExercice, getProgressionExercice } from '../api';
+import type { ExerciceSeance, ProgressionResponse } from '../types';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function DetailSeance() {
   const { id } = useParams<{ id: string }>();
@@ -14,10 +15,13 @@ export default function DetailSeance() {
   const [repetitions, setRepetitions] = useState(10);
   const [poids, setPoids] = useState(0);
 
-const [exerciceEnEdition, setExerciceEnEdition] = useState<number | null>(null);
-const [editSeries, setEditSeries] = useState(0);
-const [editRepetitions, setEditRepetitions] = useState(0);
-const [editPoids, setEditPoids] = useState(0);
+  const [exerciceEnEdition, setExerciceEnEdition] = useState<number | null>(null);
+  const [editSeries, setEditSeries] = useState(0);
+  const [editRepetitions, setEditRepetitions] = useState(0);
+  const [editPoids, setEditPoids] = useState(0);
+
+  const [nomSelectionne, setNomSelectionne] = useState<string>('');
+  const [progression, setProgression] = useState<ProgressionResponse[]>([]);
 
   useEffect(() => {
     getExercices(seanceId)
@@ -170,6 +174,38 @@ const [editPoids, setEditPoids] = useState(0);
           </ul>
         )
       }
+      {/* Sélecteur d'exercice pour la progression */}
+      <div style={{ marginTop: 32 }}>
+        <select
+          value={nomSelectionne}
+          onChange={async e => {
+            setNomSelectionne(e.target.value);
+            if (e.target.value) {
+              const userId = Number(localStorage.getItem('userId'));
+              const data = await getProgressionExercice(e.target.value, userId);
+              setProgression(data);
+            }
+          }}
+          style={{ marginBottom: 16, padding: 8 }}
+        >
+          <option value="">-- Voir la progression d'un exercice --</option>
+          {[...new Set(exercices.map(e => e.nom))].map(nom => (
+            <option key={nom} value={nom}>{nom}</option>
+          ))}
+        </select>
+
+        {progression.length > 0 && (
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={progression}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="poids" stroke="#C8F135" strokeWidth={2} dot={{ fill: '#C8F135' }} />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+      </div>
     </div>
   );
 }

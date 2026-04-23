@@ -14,6 +14,13 @@ export interface ExerciceSeance {
   seance?: { id: number };
 }
 
+export interface ProgressionResponse {
+  date: string;
+  series: number;
+  repetitions: number;
+  poids: number;
+}
+
 export interface Seance {
   id: number;
   nom: string;
