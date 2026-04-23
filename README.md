@@ -93,3 +93,4 @@ L'application démarre sur `http://localhost:5173`
 
 **Nicolas Giethlen** — Développeur en reconversion vers Java Full-Stack  
 GitHub : [github.com/NicolasGiethlen](https://github.com/NicolasGiethlen)
+
