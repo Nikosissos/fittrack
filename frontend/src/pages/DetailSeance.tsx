@@ -23,10 +23,20 @@ export default function DetailSeance() {
   const [nomSelectionne, setNomSelectionne] = useState<string>('');
   const [progression, setProgression] = useState<ProgressionResponse[]>([]);
 
+  const [loading, setLoading] = useState(true);
+  const [erreur, setErreur] = useState('');
+
   useEffect(() => {
     getExercices(seanceId)
-      .then(data => Array.isArray(data) ? setExercices(data) : setExercices([]))
-      .catch(() => setExercices([]));
+      .then(data => {
+        Array.isArray(data) ? setExercices(data) : setExercices([]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setErreur('Impossible de charger les séances.');
+        setLoading(false);
+        setExercices([]);
+      });
   }, [seanceId]);
 
   const handleAjouter = async (e: React.FormEvent) => {
@@ -118,7 +128,8 @@ export default function DetailSeance() {
           </button>
         </form>
       </div>
-
+      {loading && <div className="empty">// Chargement...</div>}
+      {erreur && <div style={{ color: 'red' }}>{erreur}</div>}
       {exercices.length === 0
         ? <div className="empty">// Aucun exercice. Ajoute ton premier mouvement.</div>
         : (

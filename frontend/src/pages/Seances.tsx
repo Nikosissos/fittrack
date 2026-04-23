@@ -10,11 +10,20 @@ export default function Seances() {
   const [nom, setNom] = useState('');
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [erreur, setErreur] = useState('');
 
   useEffect(() => {
-    getSeances(UTILISATEUR_ID)
-      .then(data => Array.isArray(data) ? setSeances(data) : setSeances([]))
-      .catch(() => setSeances([]));
+      setLoading(true);
+      getSeances(UTILISATEUR_ID)
+        .then(data => {
+          Array.isArray(data) ? setSeances(data) : setSeances([]);
+          setLoading(false);
+        })
+        .catch(() => {
+          setErreur('Impossible de charger les séances.');
+          setLoading(false);
+        });
   }, []);
 
   const handleCreer = async (e: React.FormEvent) => {
@@ -63,7 +72,8 @@ export default function Seances() {
         Séances
         <span className="section-count">{seances.length} enregistrée{seances.length > 1 ? 's' : ''}</span>
       </div>
-
+      {loading && <div className="empty">// Chargement...</div>}
+      {erreur && <div style={{ color: 'red' }}>{erreur}</div>}
       {seances.length === 0
         ? <div className="empty">// Aucune séance. Commence ton premier entraînement.</div>
         : (
